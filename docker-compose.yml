@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: api-membros-slim-4-nginx
+    ports:
+      - "8082:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build: ./docker/php8
+    container_name: api-membros-slim-4-php
+    links:
+      - mysql
+    environment:
+      - PHP_FPM_ENABLE=1
+      - PHP_FPM_SERVER_ADDR=php
+      - PHP_FPM_SERVER_PORT=9000
+      - PHP_FPM_TIMEOUT=${HTTPD_TIMEOUT_TO_PHP_FPM:-180}
+      - DB_HOST=mysql
+      - DB_NAME=membros_api
+      - DB_USER=root-api
+      - DB_PASS=root-api
+      - DB_PORT=3306
+
+    volumes:
+     - ./:/var/www/html
+
+  mysql:
+    image: mysql:5.7
+    container_name: api-membros-slim-4-mysql
+    ports:
+      - 33061:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: membros_api
+      MYSQL_USER: root-api
+      MYSQL_PASSWORD: root-api
+      MYSQL_ROOT_PASSWORD: root-api
+    volumes:
+      - my-data:/var/lib/mysql
+
+volumes:
+  my-data:
