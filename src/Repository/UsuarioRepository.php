@@ -8,8 +8,9 @@ use App\Model\Usuario;
 use App\Exception\UsuarioException as UsuarioException;
 
 final class UsuarioRepository extends BaseRepository {
+    
     public function getPorId(int $id): Usuario {
-        $query = 'SELECT `id`, `nome`, `email` FROM `usuario` WHERE `id` = :id';
+        $query = 'SELECT `id`, `idIgreja`, `nome`, `email` FROM `usuario` WHERE `id` = :id';
         $statement = $this->database->prepare($query);
         $statement->bindParam('id', $id);
         $statement->execute();
@@ -19,6 +20,39 @@ final class UsuarioRepository extends BaseRepository {
         }
         return $objeto;
     }
+
+    //Alternativa GPT
+//     public function getPorId(int $id): Usuario
+// {
+//     $query = 'SELECT u.*, i.* FROM `usuario` AS u
+//               JOIN `igreja` AS i ON u.`idIgreja` = i.`id`
+//               WHERE u.`id` = :id';
+
+//     $statement = $this->database->prepare($query);
+//     $statement->bindParam('id', $id);
+//     $statement->execute();
+//     $row = $statement->fetch();
+
+//     if (! $row) {
+//         throw new UsuarioException('Usuário não encontrado.', 404);
+//     }
+
+//     $usuario = (new Usuario())
+//         ->setId((int)$row['id'])
+//         ->setIgreja(new Igreja(
+//             (int)$row['idIgreja'],
+//             $row['nome_igreja'],
+//             // Adicione aqui as demais propriedades da classe Igreja, se houver.
+//         ))
+//         ->setNome($row['nome'])
+//         ->setEmail($row['email'])
+//         ->setSenha($row['senha'])
+//         ->setAtivo((bool)$row['ativo'])
+//         ->setUltimoLogin($row['ultimoLogin']);
+
+//     return $usuario;
+// }
+
 
     public function getPorEmail(string $email): Usuario {
         $query = 'SELECT `id`, `nome`, `email` FROM `usuario` WHERE `email` = :email';

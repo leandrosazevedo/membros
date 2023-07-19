@@ -6,9 +6,18 @@ namespace App\Model;
 
 final class Visitante extends BaseModel{
     
+    private Pessoa $pessoa;
     private Igreja $igreja;
     private string $dataInicio;
     private string $observacao;
+
+    public function getPessoa(): Pessoa{
+        return $this->pessoa;
+    }
+    public function setPessoa(Pessoa $pessoa): self{
+        $this->pessoa = $pessoa;
+        return $this;
+    }
 
     public function getIgreja(): Igreja{
         return $this->igreja;

@@ -125,6 +125,7 @@ ADD CONSTRAINT `fk_instrucao`
 -- TABELA: visitante
 CREATE TABLE `membros_api`.`visitante` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `idPessoa` INT NOT NULL,
   `idIgreja` INT NOT NULL,
   `dataInicio` DATE NOT NULL,
   `observacao` TEXT,
@@ -132,11 +133,11 @@ CREATE TABLE `membros_api`.`visitante` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 ALTER TABLE `membros_api`.`visitante` 
-ADD INDEX `fk_idPessoa` (`id` ASC);
+ADD INDEX `fk_idPessoa` (`idPessoa` ASC);
 
 ALTER TABLE `membros_api`.`visitante` 
 ADD CONSTRAINT `fk_pessoa`
-  FOREIGN KEY (`id`)
+  FOREIGN KEY (`idPessoa`)
   REFERENCES `membros_api`.`pessoa` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
@@ -165,6 +166,7 @@ CREATE TABLE `membros_api`.`batismo` (
 -- TABELA: membro
 CREATE TABLE `membros_api`.`membro` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `idPessoa` INT NOT NULL,
   `idIgreja` INT NOT NULL,
   `idBatismo` INT,
   `dataAdmissao` DATE NOT NULL,
@@ -186,6 +188,16 @@ CREATE TABLE `membros_api`.`membro` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
 
 ALTER TABLE `membros_api`.`membro` 
+ADD INDEX `fk_idPessoa` (`idPessoa` ASC);
+
+ALTER TABLE `membros_api`.`membro` 
+ADD CONSTRAINT `fk_pessoa`
+  FOREIGN KEY (`idPessoa`)
+  REFERENCES `membros_api`.`pessoa` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `membros_api`.`membro` 
 ADD INDEX `fk_idIgreja` (`idIgreja` ASC);
 
 ALTER TABLE `membros_api`.`membro` 
@@ -204,6 +216,27 @@ ADD CONSTRAINT `fk_batismo`
   REFERENCES `membros_api`.`batismo` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+------ atualizacao do campo ultimaAtualizacao
+DELIMITER //
+
+CREATE TRIGGER membro_before_insert
+BEFORE INSERT ON membro
+FOR EACH ROW
+BEGIN
+    SET NEW.ultimaAtualizacao = NOW();
+END//
+
+CREATE TRIGGER membro_before_update
+BEFORE UPDATE ON membro
+FOR EACH ROW
+BEGIN
+    SET NEW.ultimaAtualizacao = NOW();
+END//
+
+DELIMITER ;
+
+
 
 -- TABELA: ocorrencia
 CREATE TABLE `membros_api`.`ocorrencia` (
@@ -243,3 +276,28 @@ ADD CONSTRAINT `fk_membro`
   REFERENCES `membros_api`.`membro` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+---- Inserção do histórico de forma dinâmica
+
+DELIMITER //
+
+CREATE TRIGGER membro_after_insert_status
+AFTER INSERT ON membro
+FOR EACH ROW
+BEGIN
+    INSERT INTO historicomembro (idMembro, status, data)
+    VALUES (NEW.id, NEW.status, NOW());
+END//
+
+CREATE TRIGGER membro_after_update_status
+AFTER UPDATE ON membro
+FOR EACH ROW
+BEGIN
+    IF NEW.status <> OLD.status THEN
+        INSERT INTO historicomembro (idMembro, status, data)
+        VALUES (NEW.id, NEW.status, NOW());
+    END IF;
+END//
+
+DELIMITER ;

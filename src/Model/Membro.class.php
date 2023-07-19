@@ -6,6 +6,7 @@ namespace App\Model;
 
 final class Membro extends BaseModel{
    
+    private Pessoa $pessoa;
     private Igreja $igreja;
     private Batismo $batismo;
     private string $dataAdmissao;
@@ -23,6 +24,14 @@ final class Membro extends BaseModel{
     private bool $construcao;
     private string $status;
     private string $ultimaAtualizacao;
+
+    public function getPessoa(): Pessoa{
+        return $this->pessoa;
+    }
+    public function setPessoa(Pessoa $pessoa): self{
+        $this->pessoa = $pessoa;
+        return $this;
+    }
 
     public function getIgreja(): Igreja{
         return $this->igreja;
