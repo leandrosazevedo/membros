@@ -27,7 +27,7 @@ CREATE TABLE `membros_api`.`igreja` (
 
 ALTER TABLE `membros_api`.`igreja` 
 ADD INDEX `fk_idEndereco` (`idEndereco` ASC);
-;
+
 ALTER TABLE `membros_api`.`igreja` 
 ADD CONSTRAINT `fk_endereco`
   FOREIGN KEY (`idEndereco`)
@@ -51,7 +51,7 @@ CREATE TABLE `membros_api`.`usuario` (
 
 ALTER TABLE `membros_api`.`usuario` 
 ADD INDEX `fk_idIgreja` (`idIgreja` ASC);
-;
+
 ALTER TABLE `membros_api`.`usuario` 
 ADD CONSTRAINT `fk_igreja`
   FOREIGN KEY (`idIgreja`)
@@ -80,9 +80,11 @@ CREATE TABLE `membros_api`.`instrucao` (
 CREATE TABLE `membros_api`.`pessoa` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(150) NOT NULL,
-  `dataNascimento` DATE,
   `sexo` VARCHAR(1) NOT NULL,
+  `dataNascimento` DATE,
   `estadoCivil` VARCHAR(50),
+  `dataCasamento` DATE,
+  `conjuge` VARCHAR(150),
   `tipoSanguineo` VARCHAR(3),
   `cpf` VARCHAR(11),
   `naturalidadeCidade` VARCHAR(150),
@@ -100,7 +102,7 @@ CREATE TABLE `membros_api`.`pessoa` (
 
 ALTER TABLE `membros_api`.`pessoa` 
 ADD INDEX `fk_idEndereco` (`idEndereco` ASC);
-;
+
 ALTER TABLE `membros_api`.`pessoa` 
 ADD CONSTRAINT `fk_endereco`
   FOREIGN KEY (`idEndereco`)
@@ -111,7 +113,7 @@ ADD CONSTRAINT `fk_endereco`
 
 ALTER TABLE `membros_api`.`pessoa` 
 ADD INDEX `fk_idInstrucao` (`idInstrucao` ASC);
-;
+
 ALTER TABLE `membros_api`.`pessoa` 
 ADD CONSTRAINT `fk_instrucao`
   FOREIGN KEY (`idInstrucao`)
@@ -131,7 +133,7 @@ CREATE TABLE `membros_api`.`visitante` (
 
 ALTER TABLE `membros_api`.`visitante` 
 ADD INDEX `fk_idPessoa` (`id` ASC);
-;
+
 ALTER TABLE `membros_api`.`visitante` 
 ADD CONSTRAINT `fk_pessoa`
   FOREIGN KEY (`id`)
@@ -141,7 +143,7 @@ ADD CONSTRAINT `fk_pessoa`
 
 ALTER TABLE `membros_api`.`visitante` 
 ADD INDEX `fk_idIgreja` (`idIgreja` ASC);
-;
+
 ALTER TABLE `membros_api`.`visitante` 
 ADD CONSTRAINT `fk_igreja`
   FOREIGN KEY (`idIgreja`)
@@ -185,7 +187,7 @@ CREATE TABLE `membros_api`.`membro` (
 
 ALTER TABLE `membros_api`.`membro` 
 ADD INDEX `fk_idIgreja` (`idIgreja` ASC);
-;
+
 ALTER TABLE `membros_api`.`membro` 
 ADD CONSTRAINT `fk_igreja`
   FOREIGN KEY (`idIgreja`)
@@ -195,7 +197,7 @@ ADD CONSTRAINT `fk_igreja`
 
 ALTER TABLE `membros_api`.`membro` 
 ADD INDEX `fk_idBatismo` (`idBatismo` ASC);
-;
+
 ALTER TABLE `membros_api`.`membro` 
 ADD CONSTRAINT `fk_batismo`
   FOREIGN KEY (`idBatismo`)
@@ -214,7 +216,7 @@ CREATE TABLE `membros_api`.`ocorrencia` (
 
 ALTER TABLE `membros_api`.`ocorrencia` 
 ADD INDEX `fk_idMembro` (`id` ASC);
-;
+
 ALTER TABLE `membros_api`.`ocorrencia` 
 ADD CONSTRAINT `fk_membro`
   FOREIGN KEY (`id`)
@@ -234,7 +236,7 @@ CREATE TABLE `membros_api`.`historicomembro` (
 
 ALTER TABLE `membros_api`.`historicomembro` 
 ADD INDEX `fk_idMembro` (`id` ASC);
-;
+
 ALTER TABLE `membros_api`.`historicomembro` 
 ADD CONSTRAINT `fk_membro`
   FOREIGN KEY (`id`)
