@@ -4,33 +4,69 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Model\Responsavel;
-use App\Exception\ResponsavelException;
+use App\Model\Igreja;
+use App\Exception\IgrejaException;
+use App\Model\Endereco;
 
-final class ResponsavelRepository extends BaseRepository {
+final class IgrejaRepository extends BaseRepository {
 
-    public function getPorId(int $responsavelId): Responsavel {
-        $query = 'SELECT `id`, `nome`, `telefone` FROM `responsavel` WHERE `id` = :id';
-        $statement = $this->database->prepare($query);
-        $statement->bindParam('id', $responsavelId);
-        $statement->execute();
-        $responsavel = $statement->fetchObject(Responsavel::class);
-        if (! $responsavel) {
-            throw new ResponsavelException('Responsável não encontrado.', 404);
-        }
-        return $responsavel;
+    private function montaObjeto(array $row): Igreja {
+        return (new Igreja())
+        ->setNome($row['nome'])
+        ->setAbreviacao($row['abreviacao'])
+        ->setDataFundacao($row['dataFundacao'])
+        ->setCnpj($row['cnpj'])
+        ->setEndereco((new Endereco)
+            ->setRua($row['rua'])
+            ->setBairro($row['bairro'])
+            ->setCidade($row['cidade'])
+            ->setUf($row['uf'])
+            ->setCep($row['cep'])
+            ->setComplemento($row['complemento'])
+            ->setId($row['idEndereco'])
+        )
+        ->setPresidente($row['presidente'])
+        ->setSecretaria($row['secretaria'])
+        ->setEmail($row['email'])
+        ->setTelefone($row['telefone'])
+        ->setId($row['id']);
     }
 
-    public function create(Responsavel $responsavel): Responsavel {
+    public function getPorId(int $id): Igreja {
+        $query = 'SELECT i.*, e.* FROM `igreja` AS i
+                    INNER JOIN `endereco` AS e ON i.`idEndereco` = e.`id`
+                    WHERE `id` = :id';
+
+        $statement = $this->database->prepare($query);
+        $statement->bindParam('id', $id);
+        $statement->execute();
+        $row = $statement->fetch();
+        if (!$row) {
+            throw new IgrejaException('Igreja não encontrada.', 404);
+        }
+        return $this->montaObjeto($row);
+    }
+
+    public function create(Igreja $igreja): Igreja {    
         $query = '
-            INSERT INTO `responsavel`
-                (`nome`, `telefone`)
+            INSERT INTO `igreja`
+                (`nome`, `abreviacao`, `dataFundacao`, `cnpj`, `idEndereco`, `presidente`, `secretaria`, `email`, `telefone`)
             VALUES
-                (:nome, :telefone)
+                (:nome, :abreviacao, :dataFundacao, :cnpj, :idEndereco, :presidente, :secretaria, :email, :telefone)
         ';
         $statement = $this->database->prepare($query);
-        $nome = $responsavel->getNome();
-        $telefone = $responsavel->getTelefone();
+        $nome = $igreja->getNome();
+        $abreviacao = $igreja->getAbreviacao();
+        $dataFundacao = $igreja->getDataFundacao();
+        $cnpj = $igreja->getCnpj();
+        $idEndereco = $igreja->getEndereco().getId();
+        $presidente = $igreja->getPresidente();
+        $secretaria = $igreja->getSecretaria();
+        $email = $igreja->getEmail();
+        $telefone = $igreja->getTelefone();
+
+
+
         $statement->bindParam('nome', $nome);
         $statement->bindParam('telefone', $telefone);
         $statement->execute();
