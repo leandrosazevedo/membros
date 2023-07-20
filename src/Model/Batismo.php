@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Model;
 
 final class Batismo extends BaseModel{
-    private string $data;
-    private string $igreja;
-    private string $pastor;
+    protected string $data;
+    protected string $igreja;
+    protected string $pastor;
 
     public function getData(): string{
         return $this->data;

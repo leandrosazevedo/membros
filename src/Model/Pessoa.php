@@ -6,24 +6,24 @@ namespace App\Model;
 
 abstract class Pessoa extends BaseModel{
 
-    private string $nome;
-    private string $sexo;
-    private string $dataNascimento;
-    private string $estadoCivil;
-    private string $dataCasamento;
-    private string $conjuge;
-    private string $tipoSanguineo;
-    private string $cpf;
-    private string $naturalidadeCidade;
-    private string $naturalidadeUF;
-    private string $nacionalidade;
-    private string $mae;
-    private string $pai;
-    private string $email;
-    private string $celular;
-    private string $whatsapp;
-    private Endereco $endereco;
-    private Instrucao $instrucao;
+    protected string $nome;
+    protected string $sexo;
+    protected string $dataNascimento;
+    protected string $estadoCivil;
+    protected string $dataCasamento;
+    protected string $conjuge;
+    protected string $tipoSanguineo;
+    protected string $cpf;
+    protected string $naturalidadeCidade;
+    protected string $naturalidadeUF;
+    protected string $nacionalidade;
+    protected string $mae;
+    protected string $pai;
+    protected string $email;
+    protected string $celular;
+    protected string $whatsapp;
+    protected Endereco $endereco;
+    protected Instrucao $instrucao;
 
     public function getNome(): string{
         return $this->nome;

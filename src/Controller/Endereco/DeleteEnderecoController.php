@@ -1,11 +1,14 @@
 <?php
 
 declare(strict_types=1);
-namespace App\Controller\Responsavel;
+
+namespace App\Controller\Endereco;
+
+use App\Controller\Endereco\BaseEnderecoController;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\CustomResponse as Response;
 
-final class UpdateResponsavelController extends BaseResponsavelController {
+final class DeleteEnderecoController extends BaseEnderecoController {
     /**
      * @param array<string> $args
      */
@@ -14,9 +17,8 @@ final class UpdateResponsavelController extends BaseResponsavelController {
         Response $response,
         array $args
     ): Response {
-        $input = (array) $request->getParsedBody();
         $id = (int) $args['id'];
-        $obj = $this->getUpdateService()->update($input, $id);
-        return $this->jsonResponse($response, 'success', $obj, 200);
+        $this->getDeleteService()->delete($id);
+        return $this->jsonResponse($response, 'success', null, 204);
     }
 }

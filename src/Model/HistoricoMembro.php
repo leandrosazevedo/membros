@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-final class Ocorrencia extends BaseModel{
+final class HistoricoMembro extends BaseModel{
 
-    private Membro $membro;
-    private string $descricao;
-    private string $data;
+    protected Membro $membro;
+    protected string $status;
+    protected string $data;
 
     public function getMembro(): Membro{
         return $this->membro;
@@ -18,11 +18,11 @@ final class Ocorrencia extends BaseModel{
         return $this;
     }
 
-    public function getDescricao(): string{
-        return $this->descricao;
+    public function getStatus(): string{
+        return $this->status;
     }
-    public function setDescricao(string $descricao): self{
-        $this->descricao = $descricao;
+    public function setStatus(string $status): self{
+        $this->status = $status;
         return $this;
     }
 

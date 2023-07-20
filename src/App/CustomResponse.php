@@ -13,7 +13,6 @@ final class CustomResponse extends ResponseBase {
         int $encodingOptions = 0
     ): self {
         $json = json_encode($data, $encodingOptions);
-
         if ($json === false) {
             throw new \RuntimeException(json_last_error_msg(), json_last_error());
         }

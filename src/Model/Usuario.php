@@ -6,12 +6,12 @@ namespace App\Model;
 
 final class Usuario extends BaseModel
 {
-    private Igreja $igreja;
-    private string $nome;
-    private string $email;
-    private string $senha;
-    private bool $ativo;
-    private string $ultimoLogin;
+    protected Igreja $igreja;
+    protected string $nome;
+    protected string $email;
+    protected string $senha;
+    protected bool $ativo;
+    protected string $ultimoLogin;
 
     public function getIgreja(): Igreja{
         return $this->igreja;

@@ -6,24 +6,24 @@ namespace App\Model;
 
 final class Membro extends BaseModel{
    
-    private Pessoa $pessoa;
-    private Igreja $igreja;
-    private Batismo $batismo;
-    private string $dataAdmissao;
-    private string $formaAdmissao;
-    private string $igrejasAnteriores;
-    private string $ministeriosAnteriores;
-    private string $ministerioAtual;
-    private string $donsEspirituais;
-    private bool $ebd;
-    private bool $pgm;
-    private bool $dizimista;
-    private bool $ofertante;
-    private bool $contribuinte;
-    private bool $pam;
-    private bool $construcao;
-    private string $status;
-    private string $ultimaAtualizacao;
+    protected Pessoa $pessoa;
+    protected Igreja $igreja;
+    protected Batismo $batismo;
+    protected string $dataAdmissao;
+    protected string $formaAdmissao;
+    protected string $igrejasAnteriores;
+    protected string $ministeriosAnteriores;
+    protected string $ministerioAtual;
+    protected string $donsEspirituais;
+    protected bool $ebd;
+    protected bool $pgm;
+    protected bool $dizimista;
+    protected bool $ofertante;
+    protected bool $contribuinte;
+    protected bool $pam;
+    protected bool $construcao;
+    protected string $status;
+    protected string $ultimaAtualizacao;
 
     public function getPessoa(): Pessoa{
         return $this->pessoa;

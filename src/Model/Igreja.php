@@ -6,15 +6,15 @@ namespace App\Model;
 
 final class Igreja extends BaseModel{
     
-    private string $nome;
-    private string $abreviacao;
-    private string $dataFundacao;
-    private string $cnpj;
-    private Endereco $endereco;
-    private string $presidente;
-    private string $secretaria;
-    private string $email;
-    private string $telefone;
+    protected string $nome;
+    protected string $abreviacao;
+    protected string $dataFundacao;
+    protected string $cnpj;
+    protected Endereco $endereco;
+    protected string $presidente;
+    protected string $secretaria;
+    protected string $email;
+    protected string $telefone;
 
     public function getNome(): string {
         return $this->nome;

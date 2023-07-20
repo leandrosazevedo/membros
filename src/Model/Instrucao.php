@@ -6,10 +6,10 @@ namespace App\Model;
 
 final class Instrucao extends BaseModel{
 
-    private string $profissao;
-    private string $grau;
-    private string $linguaEstrangeira;
-    private string $instrumentoMusical;
+    protected string $profissao;
+    protected string $grau;
+    protected string $linguaEstrangeira;
+    protected string $instrumentoMusical;
 
     public function getProfissao():string {
         return $this->profissao;

@@ -48,6 +48,10 @@ abstract class BaseRepository {
         $query .= " LIMIT ${porPagina} OFFSET ${offset}";
         $statement = $this->database->prepare($query);
         $statement->execute($params);
-        return (array) $statement->fetchAll();
+        return $this->formataListaResultado((array) $statement->fetchAll());
+    }
+
+    protected function formataListaResultado(array $objectArray): array{
+        return $objectArray;
     }
 }

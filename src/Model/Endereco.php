@@ -6,18 +6,27 @@ namespace App\Model;
 
 final class Endereco extends BaseModel{
     
-    private string $rua;
-    private string $bairro;
-    private string $cidade;
-    private string $uf;
-    private string $cep;
-    private string $complemento;
+    protected string $rua;
+    protected ?string $numero;
+    protected string $bairro;
+    protected string $cidade;
+    protected string $uf;
+    protected string $cep;
+    protected ?string $complemento;
     
     public function getRua(): string {
         return $this->rua;
     }
     public function setRua(string $rua): self {
         $this->rua = $rua;
+        return $this;
+    }
+
+    public function getNumero(): ?string {
+        return $this->numero;
+    }
+    public function setNumero(?string $numero): self {
+        $this->numero = $numero;
         return $this;
     }
 
@@ -53,10 +62,10 @@ final class Endereco extends BaseModel{
         return $this;
     }
 
-    public function getComplemento(): string {
+    public function getComplemento(): ?string {
         return $this->complemento;
     }
-    public function setComplemento(string $complemento): self {
+    public function setComplemento(?string $complemento): self {
         $this->complemento = $complemento;
         return $this;
     }

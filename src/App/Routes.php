@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Controller\Responsavel\CreateResponsavelController;
-use App\Controller\Responsavel\GetAllResponsavelController;
-use App\Controller\Responsavel\GetOneResponsavelController;
-use App\Controller\Responsavel\UpdateResponsavelController;
+use App\Controller\Endereco\CreateEnderecoController;
+use App\Controller\Endereco\GetAllEnderecoController;
+use App\Controller\Endereco\GetOneEnderecoController;
+use App\Controller\Endereco\UpdateEnderecoController;
 use App\Middleware\Auth;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controller\Usuario\LoginUsuarioController;
 use App\Controller\Usuario\GetOneUsuarioController;
 use App\Controller\Usuario\GetAllUsuarioController;
 use App\Controller\Usuario\CreateUsuarioController;
-use App\Controller\Usuario\DeleteResponsavelController;
+use App\Controller\Usuario\DeleteEnderecoController;
 use App\Controller\Usuario\UpdateUsuarioController;
 use App\Controller\Usuario\DeleteUsuarioController;
 
@@ -29,10 +29,10 @@ $app->group('/usuario', function (RouteCollectorProxy $group): void {
     $group->delete('/{id}', DeleteUsuarioController::class)->add(new Auth());
 });
 
-$app->group('/responsavel', function (RouteCollectorProxy $group): void {
-    $group->post('', CreateResponsavelController::class)->add(new Auth());
-    $group->get('', GetAllResponsavelController::class)->add(new Auth());
-    $group->get('/{id}', GetOneResponsavelController::class)->add(new Auth());
-    $group->put('/{id}', UpdateResponsavelController::class)->add(new Auth());
-    $group->delete('/{id}', DeleteResponsavelController::class)->add(new Auth());
+$app->group('/endereco', function (RouteCollectorProxy $group): void {
+    $group->post('', CreateEnderecoController::class)->add(new Auth());
+    $group->get('', GetAllEnderecoController::class)->add(new Auth());
+    $group->get('/{id}', GetOneEnderecoController::class)->add(new Auth());
+    $group->put('/{id}', UpdateEnderecoController::class)->add(new Auth());
+    $group->delete('/{id}', DeleteEnderecoController::class)->add(new Auth());
 });

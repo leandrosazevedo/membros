@@ -2,6 +2,7 @@
 CREATE TABLE `membros_api`.`endereco` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `rua` VARCHAR(150) NOT NULL,
+  `numero` VARCHAR(45),
   `bairro` VARCHAR(150) NOT NULL,
   `cidade` VARCHAR(150) NOT NULL,
   `uf` VARCHAR(2) NOT NULL,
