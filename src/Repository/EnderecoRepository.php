@@ -11,7 +11,10 @@ final class EnderecoRepository extends BaseRepository {
 
 
     public function getPorId(int $id): Endereco {
-        $query = 'SELECT `id`, `rua`, `numero`, `bairro`, `cidade`, `uf`, `cep`, `complemento` FROM `endereco` WHERE `id` = :id';
+        $query = 'SELECT
+                    `id`, `rua`, `numero`, `bairro`, `cidade`, `uf`, `cep`, `complemento`
+                FROM `endereco`
+                WHERE `id` = :id';
         $statement = $this->database->prepare($query);
         $statement->bindParam('id', $id);
         $statement->execute();

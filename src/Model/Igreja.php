@@ -8,13 +8,13 @@ final class Igreja extends BaseModel{
     
     protected string $nome;
     protected string $abreviacao;
-    protected string $dataFundacao;
-    protected string $cnpj;
-    protected Endereco $endereco;
-    protected string $presidente;
-    protected string $secretaria;
-    protected string $email;
-    protected string $telefone;
+    protected ?string $dataFundacao;
+    protected ?string $cnpj;
+    protected ?Endereco $endereco;
+    protected ?string $presidente;
+    protected ?string $secretaria;
+    protected ?string $email;
+    protected ?string $telefone;
 
     public function getNome(): string {
         return $this->nome;
@@ -32,58 +32,58 @@ final class Igreja extends BaseModel{
         return $this;
     }
 
-    public function getDataFundacao(): string {
+    public function getDataFundacao(): ?string {
         return $this->dataFundacao;
     }
-    public function setDataFundacao(string $dataFundacao): self {
+    public function setDataFundacao(?string $dataFundacao): self {
         $this->dataFundacao = $dataFundacao;
         return $this;
     }
 
-    public function getCnpj(): string {
+    public function getCnpj(): ?string {
         return $this->cnpj;
     }
-    public function setCnpj(string $cnpj): self {
+    public function setCnpj(?string $cnpj): self {
         $this->cnpj = $cnpj;
         return $this;
     }
 
-    public function getEndereco(): Endereco {
+    public function getEndereco(): ?Endereco {
         return $this->endereco;
     }
-    public function setEndereco(Endereco $endereco): self {
+    public function setEndereco(?Endereco $endereco): self {
         $this->endereco = $endereco;
         return $this;
     }
 
-    public function getPresidente(): string {
+    public function getPresidente(): ?string {
         return $this->presidente;
     }
-    public function setPresidente(string $presidente): self {
+    public function setPresidente(?string $presidente): self {
         $this->presidente = $presidente;
         return $this;
     }
 
-    public function getSecretaria(): string {
+    public function getSecretaria(): ?string {
         return $this->secretaria;
     }
-    public function setSecretaria(string $secretaria): self {
+    public function setSecretaria(?string $secretaria): self {
         $this->secretaria = $secretaria;
         return $this;
     }
 
-    public function getEmail(): string {
+    public function getEmail(): ?string {
         return $this->email;
     }
-    public function setEmail(string $email): self {
+    public function setEmail(?string $email): self {
         $this->email = $email;
         return $this;
     }
 
-    public function getTelefone(): string {
+    public function getTelefone(): ?string {
         return $this->telefone;
     }
-    public function setTelefone(string $telefone): self {
+    public function setTelefone(?string $telefone): self {
         $this->telefone = $telefone;
         return $this;
     }

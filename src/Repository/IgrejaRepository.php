@@ -23,10 +23,11 @@ final class IgrejaRepository extends BaseRepository {
         return $this->montaObjeto($row);
     }
 
-    public function create(Igreja $igreja): Igreja {    
+    public function create(Igreja $igreja): Igreja {
         $query = '
             INSERT INTO `igreja`
-                (`nome`, `abreviacao`, `dataFundacao`, `cnpj`, `idEndereco`, `presidente`, `secretaria`, `email`, `telefone`)
+                (`nome`, `abreviacao`, `dataFundacao`, `cnpj`, `idEndereco`,
+                `presidente`, `secretaria`, `email`, `telefone`)
             VALUES
                 (:nome, :abreviacao, :dataFundacao, :cnpj, :idEndereco, :presidente, :secretaria, :email, :telefone)
         ';
@@ -52,6 +53,7 @@ final class IgrejaRepository extends BaseRepository {
         $statement->bindParam('email', $email);
         $statement->bindParam('telefone', $telefone);
         $statement->execute();
+        
         return $this->getPorId((int) $this->database->lastInsertId());
     }
 
@@ -102,9 +104,6 @@ final class IgrejaRepository extends BaseRepository {
         return $this->getPorId((int) $id);
     }
 
-     /**
-     * @return array<string>
-     */
     public function getPorPagina(
         int $paginaAtual,
         int $porPagina,
@@ -132,6 +131,17 @@ final class IgrejaRepository extends BaseRepository {
             $params,
             $total
         );
+    }
+
+    public function verificaIgrejaPorNome(string $nome): void {
+        $query = 'SELECT * FROM `igreja` WHERE `nome` = :nome';
+        $statement = $this->database->prepare($query);
+        $statement->bindParam('nome', $nome);
+        $statement->execute();
+        $usuario = $statement->fetchObject();
+        if ($usuario) {
+            throw new IgrejaException('Igreja já existe.', 400);
+        }
     }
 
     protected function formataListaResultado(array $objectArray): array{

@@ -10,7 +10,7 @@ use App\Exception\UsuarioException as UsuarioException;
 final class UsuarioRepository extends BaseRepository {
     
     public function getPorId(int $id): Usuario {
-        $query = 'SELECT `id`, `idIgreja`, `nome`, `email` FROM `usuario` WHERE `id` = :id';
+        $query = $this->getQuery(" `id` = :id ");
         $statement = $this->database->prepare($query);
         $statement->bindParam('id', $id);
         $statement->execute();
@@ -21,41 +21,8 @@ final class UsuarioRepository extends BaseRepository {
         return $objeto;
     }
 
-    //Alternativa GPT
-//     public function getPorId(int $id): Usuario
-// {
-//     $query = 'SELECT u.*, i.* FROM `usuario` AS u
-//               JOIN `igreja` AS i ON u.`idIgreja` = i.`id`
-//               WHERE u.`id` = :id';
-
-//     $statement = $this->database->prepare($query);
-//     $statement->bindParam('id', $id);
-//     $statement->execute();
-//     $row = $statement->fetch();
-
-//     if (! $row) {
-//         throw new UsuarioException('Usuário não encontrado.', 404);
-//     }
-
-//     $usuario = (new Usuario())
-//         ->setId((int)$row['id'])
-//         ->setIgreja(new Igreja(
-//             (int)$row['idIgreja'],
-//             $row['nome_igreja'],
-//             // Adicione aqui as demais propriedades da classe Igreja, se houver.
-//         ))
-//         ->setNome($row['nome'])
-//         ->setEmail($row['email'])
-//         ->setSenha($row['senha'])
-//         ->setAtivo((bool)$row['ativo'])
-//         ->setUltimoLogin($row['ultimoLogin']);
-
-//     return $usuario;
-// }
-
-
     public function getPorEmail(string $email): Usuario {
-        $query = 'SELECT `id`, `nome`, `email` FROM `usuario` WHERE `email` = :email';
+        $query = $this->getQuery(" `email` = :email ");
         $statement = $this->database->prepare($query);
         $statement->bindParam('email', $email);
         $statement->execute();
@@ -67,7 +34,7 @@ final class UsuarioRepository extends BaseRepository {
     }
 
     public function verificaPorEmail(string $email): void {
-        $query = 'SELECT * FROM `usuario` WHERE `email` = :email';
+        $query = $this->getQuery(" `email` = :email ");
         $statement = $this->database->prepare($query);
         $statement->bindParam('email', $email);
         $statement->execute();
@@ -90,7 +57,8 @@ final class UsuarioRepository extends BaseRepository {
             'nome' => is_null($nome) ? '' : $nome,
             'email' => is_null($email) ? '' : $email,
         ];
-        $query = $this->getQueryPorPagina();
+        $query = $this->getQuery(" UPPER(`nome`) LIKE CONCAT('%', UPPER(:nome), '%')
+                                    AND UPPER(`email`) LIKE CONCAT('%', UPPER(:email), '%') ");
         $statement = $this->database->prepare($query);
         $statement->bindParam('nome', $params['nome']);
         $statement->bindParam('email', $params['email']);
@@ -106,33 +74,8 @@ final class UsuarioRepository extends BaseRepository {
         );
     }
 
-    public function getQueryPorPagina(): string {
-        return "
-            SELECT `id`, `nome`, `email`
-            FROM `usuario`
-            WHERE `nome` LIKE CONCAT('%', :nome, '%')
-            AND `email` LIKE CONCAT('%', :email, '%')
-            ORDER BY `id`
-        ";
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getTodos(): array {
-        $query = 'SELECT `id`, `nome`, `email` FROM `usuario` ORDER BY `id`';
-        $statement = $this->database->prepare($query);
-        $statement->execute();
-        return (array) $statement->fetchAll();
-    }
-
     public function login(string $email, string $senha): Usuario {
-        $query = '
-            SELECT *
-            FROM `usuario`
-            WHERE `email` = :email
-            ORDER BY `id`
-        ';
+        $query = $this->getQuery(" `email` = :email ");
         $statement = $this->database->prepare($query);
         $statement->bindParam('email', $email);
         $statement->execute();
@@ -149,15 +92,17 @@ final class UsuarioRepository extends BaseRepository {
     public function create(Usuario $usuario): Usuario {
         $query = '
             INSERT INTO `usuario`
-                (`nome`, `email`, `senha`)
+                (`nome`, `idIgreja`, `email`, `senha`)
             VALUES
-                (:nome, :email, :senha)
+                (:nome, :idIgreja, :email, :senha)
         ';
         $statement = $this->database->prepare($query);
         $nome = $usuario->getNome();
+        $igreja = $usuario->getIgreja();
         $email = $usuario->getEmail();
         $senha = $usuario->getSenha();
         $statement->bindParam('nome', $nome);
+        $statement->bindParam('idIgreja', $igreja->getId());
         $statement->bindParam('email', $email);
         $statement->bindParam('senha', $senha);
         $statement->execute();
@@ -166,14 +111,17 @@ final class UsuarioRepository extends BaseRepository {
 
     public function update(Usuario $usuario): Usuario {
         $query = '
-            UPDATE `usuario` SET `nome` = :nome, `email` = :email WHERE `id` = :id
+            UPDATE `usuario` SET
+                `nome` = :nome,
+                `email` = :email
+            WHERE `id` = :id
         ';
         $statement = $this->database->prepare($query);
         $id = $usuario->getId();
-        $name = $usuario->getNome();
+        $nome = $usuario->getNome();
         $email = $usuario->getEmail();
         $statement->bindParam('id', $id);
-        $statement->bindParam('name', $name);
+        $statement->bindParam('nome', $nome);
         $statement->bindParam('email', $email);
         $statement->execute();
         return $this->getPorId((int) $id);
@@ -184,6 +132,18 @@ final class UsuarioRepository extends BaseRepository {
         $statement = $this->database->prepare($query);
         $statement->bindParam('id', $id);
         $statement->execute();
+    }
+
+    private function getQuery($where, $orderBy=false): string {
+        $query = 'SELECT `id`, `idIgreja`, `nome`, `email`
+                    FROM `usuario` ';
+        if($where){
+            $query .= ' WHERE ' . $where;
+        }
+        if($orderBy){
+            $query .= ' ORDER BY ' . $orderBy;
+        }
+        return $query;
     }
 
 }
